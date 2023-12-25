@@ -1,0 +1,2 @@
+"0","# Plot autocorrelation function for phosphorus with lags going back three years"
+"0","acf(phos_monthly_avgs_ts, lag.max = 36, i = 2)"

@@ -1,0 +1,2 @@
+"0","# Configure code chunk settings for what to include in rendered HTML document"
+"0","knitr::opts_chunk$set(include = TRUE, message = FALSE, warning = FALSE)"

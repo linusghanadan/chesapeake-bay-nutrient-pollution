@@ -1,0 +1,2 @@
+"0","# Plot autocorrelation function for nitrogen with lags going back three years"
+"0","acf(nitr_monthly_avgs_ts, lag.max = 36, i=2)"
