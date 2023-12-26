@@ -1,28 +1,31 @@
 ---
-title: "chesapeake-bay-nutrient-pollution"
-output: html_document
+title: "Time series analysis of nitrogen and phosphorus in Chesapeake Bay tidal regions"
+author: "Linus Ghanadan"
 date: "2023-12-25"
+output: html_document
 ---
 
 ## Question
 
-Since the 2010 introduction of TMDL requirements, what seasonal and non-seasonal trends are present for nitrogen and phosphorus concentrations in Chesapeake Bay tidal regions?
+Since the 2010 introduction of Total Maximum Daily Load (TMDL) requirements, what seasonal and non-seasonal trends are present for nitrogen and phosphorus concentrations in Chesapeake Bay tidal regions?
 
 ## Introduction
 
-In December 2010, the EPA took an unprecedented step in enacting federal policy specific to the Chesapeake Bay, the largest estuary in the United States [@us_environmental_protection_agency_chesapeake_2023]. Specifically, the EPA established Total Maximum Daily Load (TMDL) requirements for the amount of nitrogen, phosphorus, and sediment that is allowed in the Bay. Nitrogen and phosphorus are the two pollutants primarily responsible for algal blooms, which cause marine dead zones through taking in dissolved oxygen and blocking sunlight. Sediment also contributes to dead zones by blocking sunlight, leading it to be included in the 2010 TMDL requirements.
+The Chesapeake Bay is the largest estuary in the United States, and the largest body of water that is regulated under the Clean Water Act [@us_environmental_protection_agency_chesapeake_2023]. Federal regulation pertaining to the Bay took decades to implement, and this is in large part because of the Bay's large size and the many stakeholders involved. In the 1970s, the Bay was identified as one of the first areas in the world to have a marine dead zone, a phenomenon that literally suffocates aquatic life due to lack of oxygen in the water. Despite dead zones being identified in the 1970s, it was not until 2000 that the Bay was designated as an "impaired water" under the Clean Water Act. Then, it took another ten years, until 2010, for the EPA to take the next step of issuing **Total Maximum Daily Load** (TMDL) requirements, the regulatory action mandating water quality improvement.
 
-This analysis will focus on nitrogen and phosphorus, the two nutrient pollutants regulated under the 2010 TMDL requirements. A 2022 study found that agricultural runoff was the largest source of nutrient pollution, accounting for 48% of nitrogen and 27% of phosphorus in the Chesapeake Bay [@chesapeake_progress_2025_nodate]. Both of these pollutants also get to the Bay as a result of urban and suburban runoff, wastewater treatment plants releasing treated water, and natural sources (i.e., runoff from forests, wetlands, etc.). In addition, about 25% of nitrogen that ends up in the Bay comes from air pollution that is originally emitted to the atmosphere by sources such as cars and factories [@burns_atmospheric_2021]. Through a process called atmospheric deposition, these nitrogen compounds react with other chemicals to become nitrous oxides, which can be deposited back to Earth's surface through precipitation or as dry deposition.
+Specifically, a TMDL is the maximum amount of a particular pollutant that a body of water can receive and still meet applicable water quality standards [@us_environmental_protection_agency_chesapeake_2023]. This maximum amount is calculated in pounds based on measurements taken at areas where pollution is likely to end up in the Bay. In their 2010 regulation, the EPA established TMDL requirements for nitrogen, phosphorus, and sediment. Nitrogen and phosphorus, referred to as nutrients because of their role in providing nutrition to many animals and plants, cause algal blooms, which cause marine dead zones through taking in dissolved oxygen and blocking sunlight. Sediment contributes to dead zones by blocking sunlight as well, leading it to also be included in the 2010 TMDL requirements.
+
+This analysis will focus on nitrogen and phosphorus, the two pollutants responsible for algal blooms in the Chesapeake Bay. A 2022 study found that agricultural runoff was the largest source of nutrient pollution, accounting for 48% of nitrogen and 27% of phosphorus in the Chesapeake Bay [@chesapeake_progress_2025_nodate]. Both of these pollutants also get to the Bay as a result of urban and suburban runoff, wastewater treatment plants releasing treated water, and natural sources (e.g., runoff from forests, wetlands, etc.). In addition, about 25% of nitrogen that ends up in the Bay comes from air pollution that is originally emitted to the atmosphere by sources such as cars and factories [@burns_atmospheric_2021]. Through a process called atmospheric deposition, these nitrogen compounds react with other chemicals to become nitrous oxides, which can be deposited back to Earth's surface through precipitation or as dry deposition.
 
 Through conducting a time series analysis of post-2010 nitrogen and phosphorus concentration measurements, my goal is to better understand how concentrations have changed since the introduction of TMDL requirements. I'm also interested in the nature of any seasonality and whether the three time series components (i.e., seasonal, trend, and random) are consistent across both nitrogen and phosphorus.
 
 ## Data
 
-Yearly water quality data on the Chesapeake Bay's tidal and non-tidal regions going back to 1984 is publicly available on the Chesapeake Bay Program DataHub [@chesapeake_bay_program_datahub_traditional_nodate]. Data is organized into either Tier 1, 2, or 3 depending on how it was collected. While Tier 1 and 2 data can be collected by any interested group, Tier 3 data is collected by monitoring stations overseen by experienced professionals. Only Tier 3 data can be used for governmental regulatory assessments.
+Yearly water quality data on the Chesapeake Bay's tidal and non-tidal regions going back to 1984 is publicly available on the Chesapeake Bay Program (CBP) DataHub [@chesapeake_bay_program_datahub_traditional_nodate]. Data is organized into either Tier 1, 2, or 3 depending on how it was collected. While Tier 1 and 2 data can be collected by any interested group, Tier 3 data is collected by monitoring stations overseen by experienced professionals. Only Tier 3 data can be used for governmental regulatory assessments.
 
 For my analysis, I will be using 2010 to 2019 Tier 3 data collected at 143 different monitoring stations positioned throughout the Chesapeake Bay tidal regions, which includes the mainstem Bay and tributary components. Across the 10 years that we are looking at, we'll have a total of 43,809 nitrogen observations and 43,590 phosphorus observations.
 
-Below, we import the R packages used in this analysis. Then, we read in the yearly water quality data using their CBP DataHub URL. We also process the data by creating separate data.frames for total nitrogen and phosphorus measurements.
+Below, we import the R packages used in this analysis. Then, we read in the yearly water quality data using their CBP DataHub URL. We also process the data by creating separate *data.frames* for total nitrogen and phosphorus measurements.
 
 ```{r setup, include=FALSE}
 # Configure code chunk settings for what to include in rendered HTML document
@@ -85,7 +88,7 @@ rm(excel_urls, file_name, local_path, temp_dir, url)
 
 ## Exploratory analysis
 
-To get an idea of what is going on with the data, we'll first calculate moving averages for each year-month, storing as both a tsibble and data.frame. We'll plot these moving averages just to get a general idea of what types of trends we might be looking at.
+To get an idea of what is going on with the data, we'll first calculate moving averages for each year-month, storing the resulting output as both a *tsibble* and *data.frame*. We'll plot these moving averages just to get a general idea of what types of trends we might be looking at.
 
 ```{r}
 # Compute nitrogen monthly moving average, and store as tsibble
@@ -133,17 +136,17 @@ phos_monthly_avgs_df %>%
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-Similar to the nitrogen plot, phosphorus also seems to exhibit a distinct seasonal trend. Again, it also is unclear whether there is non-seasonal trend.
+Similar to the nitrogen plot, phosphorus also seems to exhibit a distinct seasonal trend. Again, it is unclear whether there is a non-seasonal trend.
 
 ## Methods
 
 #### Autocorrelation function
 
-The autocorrelation function calculates the correlation between the dependent variable at a given point in time and various time lags for this same variable. For us, the autocorrelation will provide us with a useful glimpse into the nature of the seasonality going on with nitrogen and phosphorus concentrations.
+The autocorrelation function calculates the correlation between the dependent variable at a given point in time and various time lags for this same variable. Thus, the autocorrelation function provides us with a tool that allows us to better understand any seasonal trends present in our data. This will be useful for us in subsequent steps of our time series analysis.
 
 #### STL decomposition
 
-As a core part of this time series analysis, I'll be constructing a seasonal-trend decomposition using locally estimated scatterplot smoothing (LOESS), which is often abbreviated as a STL decomposition model. STL allows us to separate our monthly average concentrations into three components: seasonal trend, non-seasonal trend, and remainder. Through plotting these components next to each other, we gain a more intuitive understanding on the underlying forces contributing to variation in our dependent variable, which in this case is the monthly average concentration.
+As a core part of this time series analysis, I'll be constructing a seasonal trend decomposition using locally estimated scatterplot smoothing (LOESS), which is often abbreviated as a STL decomposition model. STL allows us to separate our monthly average concentrations into three components: seasonal trend, non-seasonal trend, and remainder. Through plotting these components next to each other, we gain a more intuitive understanding of the underlying forces contributing to variation in our dependent variable, which in this case is the monthly average concentration.
 
 As opposed to other decomposition methods, one thing that is particular to STL models is the ability to specify the length of a season. It can be helpful to adjust this input depending on our desired level of smoothing for the non-seasonal trend. We will use our results from the autocorrelation function to inform our chosen length of seasons. The autocorrelation function is useful in this context because it can tell us after how many lags we see a drop-off in correlation, indicating there is a drop in the significance of the seasonal trend.
 
@@ -163,36 +166,36 @@ Looking at this autocorrelation plot for nitrogen, I see that the *t-16* lag is 
 acf(phos_monthly_avgs_ts, lag.max = 36, i = 2)
 ```
 
-For phosphorus, there is a very consistent marginal decline for each set of lags over the course of the three years. This is good news for our STL because it means that the seasonal trend will be easier to separate from the non-seasonal trend. Like I did with nitrogen, I'm also going to use two-year seasons for phosphorus. Similar to the case with nitrogen, it seems to me like the drop-off in lag correlations from year two to year three is a bit larger than from year one to year two. This suggests that a two-year seasonal cycle will give us an informative nonseasonal-trend component that is neither too eager nor too hesitant to categorize differences as trends.
+For phosphorus, there is a very consistent marginal decline for each set of lags over the course of the three years. This is good news for our STL because it means that the seasonal trend will be easier to separate from the non-seasonal trend. Like I did with nitrogen, I'm also going to use two-year seasons for phosphorus. Similar to the case with nitrogen, it seems to me like the drop-off in lag correlations from year two to year three is a bit larger than from year one to year two. This suggests that a two-year seasonal cycle will give us an informative non-seasonal trend component that is neither too eager nor too hesitant to categorize differences as non-seasonal trends.
 
 #### STL decomposition
 
 ```{r}
-# Conduct STL time series analysis for nitrogen with two-year seasons, and extract components
+# Conduct STL for nitrogen with two-year seasons, and extract components
 nitr_decomp <- nitr_monthly_avgs_ts %>%
   fabletools::model(feasts::STL(monthly_avg, t.window = 24)) %>% 
   generics::components()
 
-# Plot STL time series analysis of nitrogen concentration
+# Plot STL model
 autoplot(nitr_decomp) +
-  labs(title = "STL Time Series Analysis of Nitrogen Concentration", x = "Year Month")
+  labs(title = "STL model for nitrogen concentration", x = "Year Month")
 ```
 
-In this plot of the three STL components for nitrogen, it is still difficult to see a long-term trend, despite the line being fairly smooth. There does seem to be a slight downward trend until around 2018 things really begin increasing. In addition the grey bars on the left all represent the same range, implying that the remainder components contributed the most to nitrogen concentration. However, this seems to be very influenced by the high spike in 2014.
+In this plot of the three STL components for nitrogen, it is still difficult to see a long-term trend, despite the line being fairly smooth. There does seem to be a slight downward trend until 2018. From 2018 to 2019, there is a clear increase, but this change is then offset by an equivalent decrease over the course of 2019 to 2020. In addition the grey bars on the left all represent the same range, implying that the remainder components of our STL model contributed the most to variation in nitrogen concentration. However, this seems to be very influenced by the high spike in 2014.
 
 ```{r}
-# Conduct STL time series analysis for phosphorus with two-year seasons, and extract components
+# Conduct STL for phosphorus with two-year seasons, and extract components
 phos_decomp <- phos_monthly_avgs_ts %>%
   fabletools::model(feasts::STL(monthly_avg, t.window = 24)) %>% 
   generics::components()
 
-# Plot STL time series analysis
+# Plot STL model
 autoplot(phos_decomp) +
-  labs(title = "STL Time Series Analysis of Phosphorus Concentration", x = "Year Month")
+  labs(title = "STL model of phosphorus concentration", x = "Year Month")
 
 ```
 
-The STL plot for phosphorus does make it seem like there is a long-term downward trend, but it is difficult to tell how significant it is because of the long grey bar, which indicates it is least influential of the three components. In this case, the grey bars show us that seasonality contributes the most to the variation in phosphorus concentration.
+The STL plot for phosphorus does make it seem like there is a long-term downward trend, but it is difficult to tell how significant it is because of the long grey bar, which indicates it is least influential of the three components in our STL model. In this case, the grey bars show us that seasonality contributes the most to the variation in phosphorus concentration.
 
 ```{r}
 # For nitrogen, plot monthly mean, seasonally adjusted monthly mean, STL seasonality, and STL trend
@@ -228,7 +231,7 @@ ggplot(phos_monthly_avgs_df, aes(yr_mo)) +
   theme(legend.position = "top", plot.title = element_text(hjust = 0.5))
 ```
 
-Our plot for phosphorus further supports the idea that there is a slight downward trend over the ten years. If you independently trace the maximums or minimums, the line does seem to be moving downward at an oscillating but fairly consistent rate. Unlike nitrogen, phosphorus concentrations shoot up in the middle of the year around May, have a relatively flat peak lasting from June to August, and then shoot down at the end of Summer.
+Our plot for phosphorus further supports the idea that there is a slight downward trend over the decade. If you independently trace the maximums or minimums, the line does seem to be moving downward at an oscillating but fairly consistent rate. Unlike nitrogen, phosphorus concentrations shoot up in the middle of the year around May, have a relatively flat peak lasting from June to August, and then shoot down at the end of Summer.
 
 #### Simple linear regressions based on STL model parameters
 
@@ -239,7 +242,7 @@ summary(nitr_season_reg)
 
 ```
 
-Adjusted R-squared of 0.55 indicates that seasonal trends can explain a bit over half (55%) of the variation in nitrogen monthly mean.
+The adjusted R-squared of 0.55 indicates that seasonal trends can explain a bit over half (55%) of the variation in nitrogen monthly mean.
 
 ```{r}
 # Run regression of season component on monthly average phosphorus
@@ -253,40 +256,74 @@ For phosphorus, adjusted R-squared of this regression is 0.76, confirming our id
 # Run regression of year-month on trend component for nitrogen
 nitr_trend_reg <- lm(trend ~ yr_mo, data = nitr_decomp)
 summary(nitr_trend_reg)
-
-# Compute the confidence interval for the coefficient of yr_mo
-# Multiply by 120 to estimate trend over 10 years
-nitr_trend_10_yr <- 120 * confint(nitr_trend_reg, "yr_mo")
-cat('nitr_trend_10_yr:', signif(nitr_trend_10_yr, 3))
-
-# Convert to percent change since January 2010 observation
-nitr_percent_trend_10_yr <- (nitr_trend_10_yr / nitr_decomp$monthly_avg[1]) * 100
-cat('\nnitr_percent_trend_10_yr:', signif(nitr_percent_trend_10_yr, 3))
 ```
 
-In this linear regression, we look at the influence of year-month on our non-seasonal trend component for nitrogen. The regression output tells us that we can say at an alpha equals 0.01 significance level that the 10-year non-seasonal trend component is negative. However, the low adjusted R-squared also tells us that variation in year-month explains very little of the variation in trend component. Then, the first interval tells us that there is a 95% chance that the interval from -0.00277 mg/L to -0.000504 mg/L contains the true 10-year non-seasonal trend component. The second interval is telling us that this represents a -0.237% to -0.043% change as compared to the monthly average in January 2010.
+```{r}
+# Compute the confidence interval for the coefficient of yr_mo
+# Multiply by 120 to estimate 10-year change in trend component
+nitr_trend_10_yr <- 120 * confint(nitr_trend_reg, "yr_mo")
+cat('95% confidence interval for 10-year change in nitrogen non-seasonal trend component:',
+    '\n[',
+    sprintf("%.4f", nitr_trend_10_yr[1]),
+    ',',
+    sprintf("%.4f", nitr_trend_10_yr[2]),
+    ']')
+```
+
+```{r}
+# Convert to percent change since January 2010 observation
+nitr_percent_trend_10_yr <- (nitr_trend_10_yr / nitr_decomp$trend[1]) * 100
+cat('95% confidence interval for 10-year percent change in nitrogen non-seasonal trend component:',
+    '\n[',
+    sprintf("%.2f", nitr_percent_trend_10_yr[1]),
+    ',',
+    sprintf("%.2f", nitr_percent_trend_10_yr[2]),
+    ']')
+```
+
+In this linear regression, we look at the influence of year-month on our non-seasonal trend component for nitrogen. The regression output tells us that we can say at an alpha equals 0.01 significance level that the 10-year change in non-seasonal trend component was negative. However, the low adjusted R-squared also tells us that variation in year-month explains very little of the variation in trend component. Then, the first interval tells us that there is a 95% chance that the interval from -0.0028 mg/L to -0.0005 mg/L contains the true 10-year change in non-seasonal trend component. The second interval is telling us that this represents a -0.28% to -0.05% change as compared to the non-seasonal trend component in January 2010.
 
 ```{r}
 # Run regression of year-month on trend component for phosphorus
 phos_trend_reg <- lm(trend ~ yr_mo, data = phos_decomp)
 summary(phos_trend_reg)
-
-# Compute the confidence interval for the coefficient of yr_mo
-# Multiply by 120 to estimate trend over 10 years
-phos_trend_10_yr <- 120 * confint(phos_trend_reg, "yr_mo")
-cat('phos_trend_10_yr:', signif(phos_trend_10_yr, 3))
-
-# Convert to percent change since January 2010 observation
-phos_percent_trend_10_yr <- (phos_trend_10_yr / phos_decomp$monthly_avg[1]) * 100
-cat('\nphos_percent_trend_10_yr:', signif(phos_percent_trend_10_yr, 3))
 ```
 
-For phosphorus, the linear regression output tells us that we are confident at the alpha equals 0.01 level that the 10-year non-seasonal trend component was negative. It is also worth noting that the adjusted R-squared tells us that over half (56%) of the the variation in trend component can be explained by variation in year-month. Lastly, we find that there is a 95% chance that the interval between -0.000299 mg/L and -0.000217 mg/L contains the true 10-year non-seasonal trend component. This represents a -0.524% to -0.380% change as compared to the monthly average in January 2010.
+```{r}
+# Compute the confidence interval for the coefficient of yr_mo
+# Multiply by 120 to estimate 10-year change in trend component
+phos_trend_10_yr <- 120 * confint(phos_trend_reg, "yr_mo")
+cat('95% confidence interval for 10-year change in phosphorus non-seasonal trend component:',
+    '\n[',
+    sprintf("%.5f", phos_trend_10_yr[1]),
+    ',',
+    sprintf("%.5f", phos_trend_10_yr[2]),
+    ']')
+```
+
+```{r}
+# Convert to percent change since January 2010 observation
+phos_percent_trend_10_yr <- (phos_trend_10_yr / phos_decomp$trend[1]) * 100
+cat('95% confidence interval for 10-year percent change in phosphorus non-seasonal trend component:',
+    '\n[',
+    sprintf("%.2f", phos_percent_trend_10_yr[1]),
+    ',',
+    sprintf("%.2f", phos_percent_trend_10_yr[2]),
+    ']')
+```
+
+For phosphorus, the linear regression output tells us that we are confident at the alpha equals 0.01 level that the 10-year change in non-seasonal trend component was negative. It is also worth noting that the adjusted R-squared tells us that over half (56%) of the the variation in trend component can be explained by variation in year-month. Lastly, we find that there is a 95% chance that the interval between -0.00030 mg/L and -0.00022 mg/L contains the true 10-year change in non-seasonal trend component. This represents a -0.52% to -0.38% change as compared to the non-seasonal trend component in January 2010.
 
 ## Conclusion
 
-My time series analysis suggests that seasonality plays a substantial role in contributing to variation in the monthly mean concentration of nitrogen and phosphorus in tidal regions of the Chesapeake Bay. For nitrogen, seasonal trends explained 55% of the variation in monthly means, and the relationship was even stronger for phosphorus, with seasonal-trends explaining 76% of the variation. While the seasonal component for nitrogen was highest during Winter, the seasonal component for phosphorus was highest during Summer.
+My time series analysis suggests that seasonality plays a substantial role in contributing to variation in the monthly mean concentration of nitrogen and phosphorus in tidal regions of the Chesapeake Bay. For nitrogen, seasonal trends explained 55% of the variation in monthly means, and the relationship was even stronger for phosphorus, with seasonal trends explaining 76% of the variation. While the seasonal component for nitrogen was highest during Winter, the seasonal component for phosphorus was highest during Summer.
 
-This analysis was also interested in any non-seasonal trend that has occurred since the introduction of TMDL requirements in 2010. For both nitrogen and phosphorus, we find evidence at an alpha level of 0.01 that the 10-year non-seasonal trend is negative. However, our confidence intervals suggest that such trends represent a less than 1% decrease in concentration over the course of the 10 years for both nutrient pollutants. It was also notable how the non-seasonal trend was much more consistent for phosphorus than nitrogen, as this can be seen in our STL visualization and is also reflected by the larger adjusted R-squared phosphorus (0.56) compared to nitrogen (0.06) computed in the linear regression of non-seasonal trend against year-month.
+This analysis was also interested in any non-seasonal trend that has occurred since the introduction of TMDL requirements in 2010. For both nitrogen and phosphorus, we find evidence at an alpha level of 0.01 that the 10-year change in non-seasonal trend is negative. However, our confidence intervals suggest that, for both nutrient pollutants, these changes in trend represent a less than 1% decrease in concentration over the decade. It was also notable how the non-seasonal trend was much more consistent for phosphorus than nitrogen. This can be seen in our STL visualization and is also reflected by the larger adjusted R-squared for phosphorus (0.56) compared to nitrogen (0.06) computed in the linear regression of non-seasonal trend component against year-month.
 
-The main limitation of this analysis was that no form of spatial interpolation was employed to estimate concentrations across the tidal region based on location of measurements. It would be interesting to compare such an analysis to what we did here, as a significant differences might indicate that sampled areas are not spread throughout the region in a representative manner. Further analysis might also investigate what happened at the beginning of 2014 that could have led to the high spike in nitrogen levels at that time, in addition to factors that might have fueled the gradual increase seen over the course of 2018.
+The main limitation of this analysis was that no form of spatial interpolation was employed to estimate concentrations across the tidal region based on the location of measurements. It would be interesting to compare such an analysis to what we did here, as any significant differences would imply that sampled areas are not spread throughout the region in a representative manner. Further analysis might also investigate what happened at the beginning of 2014 that could have led to the high spike in nitrogen levels at that time, in addition to factors that might have fueled the increase seen over the course of 2018.
+
+## References
+- Burns, Douglas A., Gopal Bhatt, Lewis C. Linker, Jesse O. Bash, Paul D. Capel, and Gary W. Shenk. 2021. “Atmospheric Nitrogen Deposition in the Chesapeake Bay Watershed: A History of Change.” Atmospheric Environment 251 (April): 118277. https://doi.org/10.1016/j.atmosenv.2021.118277.
+- Chesapeake Bay Program DataHub. n.d. “Traditional Partner Tidal (Tier 3) Data.” https://datahub.chesapeakebay.net/FileDownloads.
+- Chesapeake Progress. n.d. “2025 Watershed Implementation Plans (WIPs).” https://www.chesapeakeprogress.com/clean-water/watershed-implementation-plans.
+- U.S. Environmental Protection Agency. 2023. “Chesapeake Bay TMDL Fact Sheet.” https://www.epa.gov/chesapeake-bay-tmdl/chesapeake-bay-tmdl-fact-sheet.
