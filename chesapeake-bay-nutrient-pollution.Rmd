@@ -1,5 +1,5 @@
 ---
-title: "Time series analysis of nitrogen and phosphorus in Chesapeake Bay tidal regions"
+title: "Time series analysis of nutrient pollution in Chesapeake Bay tidal regions"
 author: "Linus Ghanadan"
 date: "2023-12-25"
 output: html_document
