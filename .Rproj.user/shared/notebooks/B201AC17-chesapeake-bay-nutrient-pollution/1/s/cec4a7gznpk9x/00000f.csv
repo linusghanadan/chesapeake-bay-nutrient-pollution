@@ -1,8 +1,0 @@
-"0","# Conduct STL time series analysis for nitrogen with two-year seasons, and extract components"
-"0","nitr_decomp <- nitr_monthly_avgs_ts %>%"
-"0","  fabletools::model(feasts::STL(monthly_avg, t.window = 24)) %>% "
-"0","  generics::components()"
-"0",""
-"0","# Plot STL time series analysis of nitrogen concentration"
-"0","autoplot(nitr_decomp) +"
-"0","  labs(title = ""STL Time Series Analysis of Nitrogen Concentration"", x = ""Year Month"")"
