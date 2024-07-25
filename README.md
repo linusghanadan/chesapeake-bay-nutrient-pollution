@@ -1,8 +1,8 @@
 # Time Series Analysis of Nutrient Concentration in Chesapeake Bay
 ## Purpose
-This analysis seeks to better understand the seasonality of nitrogen and phosphorus concentration in Chesapeake Bay tidal regions, in addition to any non-seasonal trends since 2010. For this reason, I build a seasonal trends decomposition using LOESS (STL) model, which models concentration as a function of three components: seasonal trend, non-seasonal trend, and remainder. After analyzing my STL model with visualizations and parameter regressions, I make conclusions regarding the driving forces of variation in nutrient pollution over the previous decade.
+As a final project for my Statistics class, I conducted a 2010-2019 time series analysis of nutrient concentration in Chesapeake Bay tidal regions using 43,809 nitrogen and phosphorus samples from 143 different monitoring stations. Using a STL decomposition model, a statistical technique that separates data into seasonal trend, non-seasonal trend, and random components, my analysis looks at what has contributed to the variation in nutrient levels over this span of time. Since 2010 marked the beginning of federal water quality requirements under the Clean Water Act, the goal of my analysis was mainly to identify any overarching non-seasonal trend in nutrient levels.
 
-## Repository contents
+## Repository Contents
     chesapeake_bay_nutrient_pollution
     └───images
         │   STL visualization for nitrogen: nitrogen.png
@@ -14,5 +14,5 @@ This analysis seeks to better understand the seasonality of nitrogen and phospho
 ## Datasets
 - 2010-2019 Chesapeake Bay Program (CBP) Traditional Partner Tidal XLSXs
 
-## Data references
+## Data References
 - Chesapeake Bay Program DataHub. n.d. “Traditional Partner Tidal (Tier 3) Data.” https://datahub.chesapeakebay.net/FileDownloads.
