@@ -1,5 +1,7 @@
 ## Time Series Analysis of Nutrient Concentration in Chesapeake Bay
 
+### [Link to Blog (with R code)](https://linusghanadan.github.io/blog/2023-12-12-post/)
+
 ### Repository Contents
     chesapeake_bay_nutrient_pollution
     └───images
